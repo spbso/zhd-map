@@ -6,6 +6,8 @@
     import locations from '../data/locations.json'
 
 
+    let panzoom;
+
     onMount(() => {
         const width = 904;
         const height = 844;
@@ -16,7 +18,7 @@
             startScale = window.innerHeight / height
         }
         const elem = document.getElementById('target-image')
-        const panzoom = Panzoom(elem, {
+        panzoom = Panzoom(elem, {
             maxScale: 5,
             contain: 'outside',
             startX: -1 * Math.round(width / 2),
@@ -43,7 +45,9 @@
         searchTerm = '';
         const campfireId = locations[identifier];
         const mapSvg = document.getElementById('target-image')
-        mapSvg.scrollTo(254, 539);
+        const campfire = document.querySelector(`.${campfireId}`);
+        panzoom.zoom(2);
+        panzoom.pan(0, 0);
     }
 </script>
 
