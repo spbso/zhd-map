@@ -56,7 +56,7 @@
         <div class="w-full">
             <input type="text"
                    class="block opacity-70 bg-[#3C241D] focus:opacity-100 text-white rounded-2xl px-5 py-2 w-full text-[24px]"
-                   placeholder="Отряд или костёр..." bind:value={searchTerm}/>
+                   placeholder="Отряд или костёр..." bind:value={searchTerm} autocomplete="off"/>
         </div>
         {#if searchTerm && searchTerm.length >= 2}
             {#if candidates && candidates.length > 0}
