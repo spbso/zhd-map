@@ -7,6 +7,16 @@
 
 
     let panzoom;
+    let scale;
+    let tooltipElements: string[] = [];
+
+    const showTooltip = (element, text, event: MouseEvent) => {
+        const tooltip = document.getElementById('tooltip')
+        tooltip.style.display = 'block'
+        tooltip.style.left = `${event.clientX - tooltip.clientWidth / 2}px`;
+        tooltip.style.top = `${event.clientY - tooltip.clientHeight - 40 / scale}px`;
+        tooltipElements = text.split(',')
+    }
 
     onMount(() => {
         const width = 904;
@@ -27,8 +37,22 @@
         });
         elem.parentElement.addEventListener('wheel', panzoom.zoomWithWheel)
         elem.addEventListener('panzoomchange', (event) => {
+            scale = event.detail.scale;
+            const tooltip = document.getElementById('tooltip')
+            tooltip.style.display = 'none'
             // console.log(event.detail) // => { x: 0, y: 0, scale: 1 }
         })
+
+        Object.keys(locations).forEach(k => {
+            const campfireId = locations[k]
+            // const elem = document.getElementById('target-image')
+            setTimeout(() => {
+                const campfireObject = document.querySelector(`.${campfireId}`);
+                campfireObject.addEventListener('click', (e: MouseEvent) => {
+                    showTooltip(campfireObject, k, e);
+                })
+            }, 100)
+        });
     })
 
     let searchTerm: string;
@@ -52,6 +76,18 @@
 </script>
 
 <div class="w-screen h-screen m-0 overflow-hidden">
+    <div class="text-center text-white inline-block absolute z-20 hidden" id="tooltip">
+        <!--        <div class="bg-[#3C241D] px-2 pt-1 bg-opacity-90">-->
+        <!--            Карамель-->
+        <!--        </div>-->
+        {#each tooltipElements as element}
+            <div class="bg-[#3C241D] px-2 bg-opacity-90">
+                {element}
+            </div>
+        {/each}
+        <div class="w-0 h-0 border-l-[80px] border-l-transparent border-r-[80px] border-r-transparent border-opacity-90 border-t-[20px] border-t-[#3C241D]">
+        </div>
+    </div>
     <div class="absolute top-[3%] left-[5%] right-[5%] z-10">
         <div class="w-full">
             <input type="text"
