@@ -46,7 +46,7 @@
                 scale = event.detail.scale;
                 // const tooltip = document.getElementById('tooltip')
                 // tooltip.style.display = 'none'
-                console.log(event.detail) // => { x: 0, y: 0, scale: 1 }
+                // console.log(event.detail) // => { x: 0, y: 0, scale: 1 }
             })
 
             Object.keys(locations).forEach(k => {
@@ -65,7 +65,7 @@
         }, 100)
     })
 
-    let searchTerm: string;
+    let searchTerm = '';
     let candidates: string[] = [];
 
     $: {
@@ -82,10 +82,16 @@
         const campfire = document.querySelector(`.${campfireId}`) as HTMLElement;
 
         // TODO Refactor
+        console.log()
         document.querySelectorAll('.tooltip').forEach(tt => tt.classList.add('hidden'))
         const tooltip = document.getElementById(`tooltip-${campfireId}`)
         tooltip.classList.remove('hidden')
         tooltip.click()
+
+        // TODO fix
+        window['pz'].zoom(1)
+        window['pz'].pan(window.innerWidth/2-Number(campfire.attributes.cx.value), window.innerHeight/2-Number(campfire.attributes.cy.value))
+
     }
 
     const mapClick = (e: MouseEvent) => {
