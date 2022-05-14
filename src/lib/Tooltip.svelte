@@ -41,9 +41,9 @@
                 [staticSide]: '-4px',
             });
         });
-        if (e) {
-            window['pz'].zoom(2);
-        }
+        // if (e) {
+        //     window['pz'].zoom(2);
+        // }
     }
 
     onMount(() => {
