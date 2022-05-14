@@ -8,7 +8,7 @@
     const tooltipElements = campfire.split(',')
     const campfireId = locations[campfire];
 
-    export function placeTooltip() {
+    export function placeTooltip(e: PointerEvent | null) {
         const arrowElement = document.getElementById(`arrow-${campfireId}`)
         const parent = document.querySelector(`.${campfireId}`)
         const tooltip = document.getElementById(`tooltip-${campfireId}`)
@@ -41,19 +41,23 @@
                 [staticSide]: '-4px',
             });
         });
+        if (e) {
+            window['pz'].zoom(2);
+        }
     }
 
     onMount(() => {
         setTimeout(() => {
-            placeTooltip();
+            placeTooltip(null);
             window['map'].addEventListener('panzoomchange', () => {
-                placeTooltip();
+                placeTooltip(null);
             });
         }, 500)
     })
 </script>
 
-<div class="text-center text-white block absolute z-20 pointer-events-none hidden tooltip" id="tooltip-{campfireId}" on:click={placeTooltip}>
+<div class="text-center text-white block absolute z-20 pointer-events-none hidden tooltip" id="tooltip-{campfireId}"
+     on:click={placeTooltip}>
     {#each tooltipElements as element}
         <div class="bg-[#3C241D] px-2 bg-opacity-90">
             {element}

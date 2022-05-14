@@ -11,64 +11,58 @@
     let scale;
     let tooltipElements: string[] = [];
 
-    const showTooltip = (element, text, event: MouseEvent) => {
-        const tooltip = document.getElementById('tooltip')
-        tooltip.style.display = 'block'
-        tooltip.style.left = `${event.clientX - tooltip.clientWidth / 2}px`;
-        tooltip.style.top = `${event.clientY - tooltip.clientHeight - 40 / scale}px`;
-        tooltipElements = text.split(',')
-    }
-
     onMount(() => {
-        const width = 904;
-        const height = 844;
+        setTimeout(() => {
+            const width = 904;
+            const height = 844;
 
-        let startScale = 1;
+            let startScale = 1;
 
-        if (width < height) {
-            startScale = window.innerWidth / width
-        } else {
-            startScale = window.innerHeight / height
-        }
+            // if (width < height) {
+            //     startScale = window.innerWidth / width
+            // } else {
+            //     startScale = window.innerHeight / height
+            // }
 
-        const elem = document.getElementById('target-image')
-        panzoom = Panzoom(elem, {
-            minScale: startScale,
-            maxScale: 5,
-            contain: 'outside',
-            cursor: 'arrow',
-            roundPixels: true,
-            startX: 36,
-            startY: -120,
-            // startX: -1 * Math.round(width / 2),
-            // startY: -1 * Math.round(height / 2),
-            startScale
-        });
-        window['pz'] = panzoom
-        window['map'] = elem
+            const elem = document.getElementById('target-image')
+            panzoom = Panzoom(elem, {
+                minScale: startScale,
+                maxScale: 5,
+                contain: 'outside',
+                cursor: 'arrow',
+                roundPixels: true,
+                // startX: 0,
+                // startY: 0,
+                // startX: -1 * Math.round(width / 2),
+                // startY: -1 * Math.round(height / 2),
+                startScale,
+            });
+            // panzoom.pan(0, 0)
+            window['pz'] = panzoom
+            window['map'] = elem
 
-        elem.parentElement.addEventListener('wheel', panzoom.zoomWithWheel)
-        elem.addEventListener('panzoomchange', (event) => {
-            scale = event.detail.scale;
-            // const tooltip = document.getElementById('tooltip')
-            // tooltip.style.display = 'none'
-            // console.log(event.detail) // => { x: 0, y: 0, scale: 1 }
-        })
+            elem.parentElement.addEventListener('wheel', panzoom.zoomWithWheel)
+            elem.addEventListener('panzoomchange', (event) => {
+                scale = event.detail.scale;
+                // const tooltip = document.getElementById('tooltip')
+                // tooltip.style.display = 'none'
+                console.log(event.detail) // => { x: 0, y: 0, scale: 1 }
+            })
 
-        Object.keys(locations).forEach(k => {
-            const campfireId = locations[k]
-            // const elem = document.getElementById('target-image')
-            setTimeout(() => {
-                const campfireObject = document.querySelector(`.${campfireId}`);
-                // createTooltip(campfireObject, k)
-                campfireObject.addEventListener('click', (e: MouseEvent) => {
-                    document.querySelectorAll('.tooltip').forEach(tt => tt.classList.add('hidden'))
-                    const tooltip = document.getElementById(`tooltip-${campfireId}`)
-                    tooltip.classList.remove('hidden')
-                    tooltip.click()
-                })
-            }, 100)
-        });
+            Object.keys(locations).forEach(k => {
+                const campfireId = locations[k]
+                setTimeout(() => {
+                    const campfireObject = document.querySelector(`.${campfireId}`);
+                    campfireObject.addEventListener('click', (e: MouseEvent) => {
+                        console.log('campfire click', campfireObject)
+                        document.querySelectorAll('.tooltip').forEach(tt => tt.classList.add('hidden'))
+                        const tooltip = document.getElementById(`tooltip-${campfireId}`)
+                        tooltip.classList.remove('hidden')
+                        tooltip.click()
+                    })
+                }, 100)
+            });
+        }, 100)
     })
 
     let searchTerm: string;
@@ -85,9 +79,13 @@
         searchTerm = '';
         const campfireId = locations[identifier];
         const mapSvg = document.getElementById('target-image')
-        const campfire = document.querySelector(`.${campfireId}`);
-        panzoom.zoom(2);
-        panzoom.pan(0, 0);
+        const campfire = document.querySelector(`.${campfireId}`) as HTMLElement;
+
+        // TODO Refactor
+        document.querySelectorAll('.tooltip').forEach(tt => tt.classList.add('hidden'))
+        const tooltip = document.getElementById(`tooltip-${campfireId}`)
+        tooltip.classList.remove('hidden')
+        tooltip.click()
     }
 
     const mapClick = (e: MouseEvent) => {
@@ -96,21 +94,11 @@
 </script>
 
 <div class="w-screen h-screen m-0 overflow-hidden">
-<!--    <div class="text-center text-white inline-block absolute z-20 hidden" id="tooltip">-->
-<!--        &lt;!&ndash;        <div class="bg-[#3C241D] px-2 pt-1 bg-opacity-90">&ndash;&gt;-->
-<!--        &lt;!&ndash;            Карамель&ndash;&gt;-->
-<!--        &lt;!&ndash;        </div>&ndash;&gt;-->
-<!--        {#each tooltipElements as element}-->
-<!--            <div class="bg-[#3C241D] px-2 bg-opacity-90">-->
-<!--                {element}-->
-<!--            </div>-->
-<!--        {/each}-->
-<!--        <div class="w-0 h-0 border-l-[80px] border-l-transparent border-r-[80px] border-r-transparent border-opacity-90 border-t-[20px] border-t-[#3C241D]">-->
-<!--        </div>-->
-<!--    </div>-->
-    {#each Object.keys(locations) as campfire}
-        <Tooltip {campfire}/>
-    {/each}
+    <div class="tooltips">
+        {#each Object.keys(locations) as campfire}
+            <Tooltip {campfire}/>
+        {/each}
+    </div>
     <div class="absolute top-[3%] left-[5%] right-[5%] z-10">
         <div class="w-full">
             <input type="text"
