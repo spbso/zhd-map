@@ -37,9 +37,11 @@
   },
   "type": "module",
   "dependencies": {
+    "@floating-ui/dom": "^0.5.0",
     "@fontsource/fira-mono": "^4.5.0",
     "@lukeed/uuid": "^2.0.0",
     "@panzoom/panzoom": "^4.4.4",
+    "@popperjs/svelte": "^0.1.1",
     "cookie": "^0.4.1",
     "d3": "^7.4.4",
     "svelte-inline-svg": "^1.1.3"

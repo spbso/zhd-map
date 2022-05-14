@@ -4,6 +4,7 @@
     import map from '../data/Frame.svg';
     import {onMount} from "svelte";
     import locations from '../data/locations.json'
+    import Tooltip from "../lib/Tooltip.svelte";
 
 
     let panzoom;
@@ -21,25 +22,36 @@
     onMount(() => {
         const width = 904;
         const height = 844;
+
         let startScale = 1;
+
         if (width < height) {
             startScale = window.innerWidth / width
         } else {
             startScale = window.innerHeight / height
         }
+
         const elem = document.getElementById('target-image')
         panzoom = Panzoom(elem, {
+            minScale: startScale,
             maxScale: 5,
             contain: 'outside',
-            startX: -1 * Math.round(width / 2),
-            startY: -1 * Math.round(height / 2),
+            cursor: 'arrow',
+            roundPixels: true,
+            startX: 36,
+            startY: -120,
+            // startX: -1 * Math.round(width / 2),
+            // startY: -1 * Math.round(height / 2),
             startScale
         });
+        window['pz'] = panzoom
+        window['map'] = elem
+
         elem.parentElement.addEventListener('wheel', panzoom.zoomWithWheel)
         elem.addEventListener('panzoomchange', (event) => {
             scale = event.detail.scale;
-            const tooltip = document.getElementById('tooltip')
-            tooltip.style.display = 'none'
+            // const tooltip = document.getElementById('tooltip')
+            // tooltip.style.display = 'none'
             // console.log(event.detail) // => { x: 0, y: 0, scale: 1 }
         })
 
@@ -48,8 +60,12 @@
             // const elem = document.getElementById('target-image')
             setTimeout(() => {
                 const campfireObject = document.querySelector(`.${campfireId}`);
+                // createTooltip(campfireObject, k)
                 campfireObject.addEventListener('click', (e: MouseEvent) => {
-                    showTooltip(campfireObject, k, e);
+                    document.querySelectorAll('.tooltip').forEach(tt => tt.classList.add('hidden'))
+                    const tooltip = document.getElementById(`tooltip-${campfireId}`)
+                    tooltip.classList.remove('hidden')
+                    tooltip.click()
                 })
             }, 100)
         });
@@ -73,21 +89,28 @@
         panzoom.zoom(2);
         panzoom.pan(0, 0);
     }
+
+    const mapClick = (e: MouseEvent) => {
+        console.log(`client=(${e.clientX}, ${e.clientY}), offset=(${e.offsetX}, ${e.offsetY}), page=(${e.pageX}, ${e.pageY})`)
+    }
 </script>
 
 <div class="w-screen h-screen m-0 overflow-hidden">
-    <div class="text-center text-white inline-block absolute z-20 hidden" id="tooltip">
-        <!--        <div class="bg-[#3C241D] px-2 pt-1 bg-opacity-90">-->
-        <!--            Карамель-->
-        <!--        </div>-->
-        {#each tooltipElements as element}
-            <div class="bg-[#3C241D] px-2 bg-opacity-90">
-                {element}
-            </div>
-        {/each}
-        <div class="w-0 h-0 border-l-[80px] border-l-transparent border-r-[80px] border-r-transparent border-opacity-90 border-t-[20px] border-t-[#3C241D]">
-        </div>
-    </div>
+<!--    <div class="text-center text-white inline-block absolute z-20 hidden" id="tooltip">-->
+<!--        &lt;!&ndash;        <div class="bg-[#3C241D] px-2 pt-1 bg-opacity-90">&ndash;&gt;-->
+<!--        &lt;!&ndash;            Карамель&ndash;&gt;-->
+<!--        &lt;!&ndash;        </div>&ndash;&gt;-->
+<!--        {#each tooltipElements as element}-->
+<!--            <div class="bg-[#3C241D] px-2 bg-opacity-90">-->
+<!--                {element}-->
+<!--            </div>-->
+<!--        {/each}-->
+<!--        <div class="w-0 h-0 border-l-[80px] border-l-transparent border-r-[80px] border-r-transparent border-opacity-90 border-t-[20px] border-t-[#3C241D]">-->
+<!--        </div>-->
+<!--    </div>-->
+    {#each Object.keys(locations) as campfire}
+        <Tooltip {campfire}/>
+    {/each}
     <div class="absolute top-[3%] left-[5%] right-[5%] z-10">
         <div class="w-full">
             <input type="text"
@@ -112,6 +135,6 @@
         {/if}
     </div>
     <div class="max-w-full max-h-full">
-        <InlineSVG src={map} id="target-image"/>
+        <InlineSVG src={map} id="target-image" on:click={mapClick}/>
     </div>
 </div>

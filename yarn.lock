@@ -443,6 +443,18 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
+"@floating-ui/core@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@floating-ui/core/-/core-0.7.0.tgz#f2442168d65c22daeb48cfb730cbc3a29a846ac7"
+  integrity sha512-W7+i5Suhhvv97WDTW//KqUA43f/2a4abprM1rWqtLM9lIlJ29tbFI8h232SvqunXon0WmKNEKVjbOsgBhTnbLw==
+
+"@floating-ui/dom@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@floating-ui/dom/-/dom-0.5.0.tgz#e4efd9e609ff3ee6778fbe4273930d6d1c220f2e"
+  integrity sha512-PS75dnMg4GdWjDFOiOs15cDzYJpukRNHqQn0ugrBlsrpk2n+y8bwZ24XrsdLSL7kxshmxxr2nTNycLnmRIvV7g==
+  dependencies:
+    "@floating-ui/core" "^0.7.0"
+
 "@fontsource/fira-mono@^4.5.0":
   version "4.5.8"
   resolved "https://registry.yarnpkg.com/@fontsource/fira-mono/-/fira-mono-4.5.8.tgz#e17123b88459d5dd459ba06a7d3b3e6d7e8f7b42"
@@ -573,6 +585,11 @@
     source-map-support "0.4.18"
     stack-utils "2.0.5"
     yazl "2.5.1"
+
+"@popperjs/svelte@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@popperjs/svelte/-/svelte-0.1.1.tgz#217ff474e2b11319b8edd1d58b809fb9643e5906"
+  integrity sha512-/zhQ0TI5cqhY/tlI+4FiU/Cn1jpQwJQTeOYor2HuQXFp+XRI07t9247OEGRqUvUBlENrVLDSPh6FU3B2MVrKSw==
 
 "@rollup/pluginutils@^4.2.1":
   version "4.2.1"
