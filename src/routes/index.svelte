@@ -10,52 +10,55 @@
 
     let panzoom;
     let scale;
-    let tooltipElements: string[] = [];
+
+    function initMap() {
+        console.log('init map')
+        const width = 904;
+        const height = 844;
+
+        let startScale = 1;
+
+        if (width < height) {
+            startScale = window.innerWidth / width
+        } else {
+            startScale = window.innerHeight / height
+        }
+
+        const elem = document.getElementById('target-image')
+        panzoom = Panzoom(elem, {
+            minScale: startScale,
+            maxScale: 5,
+            contain: 'outside',
+            cursor: 'arrow',
+            roundPixels: true,
+            // startX: -1 * Math.round(width / 2),
+            // startY: -1 * Math.round(height / 2),
+            startScale,
+        });
+        // panzoom.pan(0, 0)
+        window['pz'] = panzoom
+        window['map'] = elem
+
+        elem.parentElement.addEventListener('wheel', panzoom.zoomWithWheel)
+
+        Object.keys(locations).forEach(k => {
+            const campfireId = locations[k]
+            setTimeout(() => {
+                const campfireObject = getCampfire(campfireId);
+                campfireObject.addEventListener('click', (e: MouseEvent) => {
+                    document.querySelectorAll('.tooltip').forEach(tt => tt.classList.add('hidden'))
+                    const tooltip = document.getElementById(`tooltip-${campfireId}`)
+                    tooltip.classList.remove('hidden')
+                    tooltip.click()
+                })
+            }, 100)
+        });
+    }
+
 
     onMount(() => {
         setTimeout(() => {
-            const width = 904;
-            const height = 844;
-
-            let startScale = 1;
-
-            if (width < height) {
-                startScale = window.innerWidth / width
-            } else {
-                startScale = window.innerHeight / height
-            }
-
-            const elem = document.getElementById('target-image')
-            panzoom = Panzoom(elem, {
-                minScale: startScale,
-                maxScale: 5,
-                contain: 'outside',
-                cursor: 'arrow',
-                roundPixels: true,
-                // startX: 0,
-                // startY: 0,
-                // startX: -1 * Math.round(width / 2),
-                // startY: -1 * Math.round(height / 2),
-                startScale,
-            });
-            // panzoom.pan(0, 0)
-            window['pz'] = panzoom
-            window['map'] = elem
-
-            elem.parentElement.addEventListener('wheel', panzoom.zoomWithWheel)
-
-            Object.keys(locations).forEach(k => {
-                const campfireId = locations[k]
-                setTimeout(() => {
-                    const campfireObject = getCampfire(campfireId);
-                    campfireObject.addEventListener('click', (e: MouseEvent) => {
-                        document.querySelectorAll('.tooltip').forEach(tt => tt.classList.add('hidden'))
-                        const tooltip = document.getElementById(`tooltip-${campfireId}`)
-                        tooltip.classList.remove('hidden')
-                        tooltip.click()
-                    })
-                }, 100)
-            });
+            initMap();
         }, 100)
     })
 
@@ -87,12 +90,6 @@
         window['pz'].pan(window.innerWidth / 2 - cx, window.innerHeight / 2 - cy)
 
     }
-
-    const mapClick = (e: MouseEvent) => {
-        // console.log(`client=(${e.clientX}, ${e.clientY}), offset=(${e.offsetX}, ${e.offsetY}), page=(${e.pageX}, ${e.pageY})`)
-    }
-
-    let canvas;
 </script>
 
 <div class="w-screen h-screen m-0 overflow-hidden">
@@ -125,8 +122,6 @@
         {/if}
     </div>
     <div class="max-w-full max-h-full">
-        <!--        <canvas id="target-image" bind:this={canvas}>-->
-        <!--        </canvas>-->
-        <InlineSvg src={frame} id="target-image" on:click={mapClick}/>
+        <InlineSvg src={frame} id="target-image"/>
     </div>
 </div>
