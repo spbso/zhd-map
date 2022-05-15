@@ -10,7 +10,7 @@
 
     export function placeTooltip(e: PointerEvent | null) {
         const arrowElement = document.getElementById(`arrow-${campfireId}`)
-        const parent = document.querySelector(`.${campfireId}`)
+        const parent = document.getElementById(campfireId)
         const tooltip = document.getElementById(`tooltip-${campfireId}`)
         if (!parent) {
             throw Error("Didn't load " + campfireId)

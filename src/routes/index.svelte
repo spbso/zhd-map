@@ -1,7 +1,7 @@
 <script lang="ts">
     import Panzoom from '@panzoom/panzoom'
     import InlineSVG from 'svelte-inline-svg';
-    import map from '../data/Frame.svg';
+    import map from '../data/Frame 1.svg';
     import {onMount} from "svelte";
     import locations from '../data/locations.json'
     import Tooltip from "../lib/Tooltip.svelte";
@@ -52,7 +52,7 @@
             Object.keys(locations).forEach(k => {
                 const campfireId = locations[k]
                 setTimeout(() => {
-                    const campfireObject = document.querySelector(`.${campfireId}`);
+                    const campfireObject = document.getElementById(campfireId);
                     campfireObject.addEventListener('click', (e: MouseEvent) => {
                         console.log('campfire click', campfireObject)
                         document.querySelectorAll('.tooltip').forEach(tt => tt.classList.add('hidden'))
@@ -79,7 +79,7 @@
         searchTerm = '';
         const campfireId = locations[identifier];
         const mapSvg = document.getElementById('target-image')
-        const campfire = document.querySelector(`.${campfireId}`) as HTMLElement;
+        const campfire = document.getElementById(campfireId) as HTMLElement;
 
         // TODO Refactor
         console.log()
