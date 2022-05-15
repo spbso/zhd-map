@@ -1,7 +1,7 @@
 <script lang="ts">
     import Panzoom from '@panzoom/panzoom'
     import InlineSVG from 'svelte-inline-svg';
-    import map from '../data/Frame 1.svg';
+    import map from '../data/Frame.svg';
     import {onMount} from "svelte";
     import locations from '../data/locations.json'
     import Tooltip from "../lib/Tooltip.svelte";
@@ -18,11 +18,11 @@
 
             let startScale = 1;
 
-            // if (width < height) {
-            //     startScale = window.innerWidth / width
-            // } else {
-            //     startScale = window.innerHeight / height
-            // }
+            if (width < height) {
+                startScale = window.innerWidth / width
+            } else {
+                startScale = window.innerHeight / height
+            }
 
             const elem = document.getElementById('target-image')
             panzoom = Panzoom(elem, {
@@ -42,12 +42,12 @@
             window['map'] = elem
 
             elem.parentElement.addEventListener('wheel', panzoom.zoomWithWheel)
-            elem.addEventListener('panzoomchange', (event) => {
-                scale = event.detail.scale;
-                // const tooltip = document.getElementById('tooltip')
-                // tooltip.style.display = 'none'
-                // console.log(event.detail) // => { x: 0, y: 0, scale: 1 }
-            })
+            // elem.addEventListener('panzoomchange', (event) => {
+            //     scale = event.detail.scale;
+            //     // const tooltip = document.getElementById('tooltip')
+            //     // tooltip.style.display = 'none'
+            //     // console.log(event.detail) // => { x: 0, y: 0, scale: 1 }
+            // })
 
             Object.keys(locations).forEach(k => {
                 const campfireId = locations[k]
@@ -78,11 +78,9 @@
     const showCampfire = (identifier: string) => {
         searchTerm = '';
         const campfireId = locations[identifier];
-        const mapSvg = document.getElementById('target-image')
         const campfire = document.getElementById(campfireId) as HTMLElement;
 
         // TODO Refactor
-        console.log()
         document.querySelectorAll('.tooltip').forEach(tt => tt.classList.add('hidden'))
         const tooltip = document.getElementById(`tooltip-${campfireId}`)
         tooltip.classList.remove('hidden')

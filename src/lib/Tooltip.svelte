@@ -59,7 +59,7 @@
 <div class="text-left text-white block absolute z-10 pointer-events-none hidden tooltip" id="tooltip-{campfireId}"
      on:click={placeTooltip}>
     {#each tooltipElements as element, index}
-        <div class="bg-[#3C241D] px-1.5 bg-opacity-90 {index === 0 ? 'rounded-t-sm pt-1' : ''} {index === (tooltipElements.length-1) ? 'rounded-b-sm pb-1' : ''}">
+        <div class="bg-[#3C241D] px-1.5 bg-opacity-90">
             {element}
         </div>
     {/each}
