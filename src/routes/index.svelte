@@ -90,7 +90,9 @@
 
         // TODO fix
         window['pz'].zoom(1)
-        window['pz'].pan(window.innerWidth/2-Number(campfire.attributes.cx.value), window.innerHeight/2-Number(campfire.attributes.cy.value))
+        const cx = Number(campfire.attributes['cx'].value);
+        const cy = Number(campfire.attributes['cy'].value);
+        window['pz'].pan(window.innerWidth / 2 - cx, window.innerHeight / 2 - cy)
 
     }
 
