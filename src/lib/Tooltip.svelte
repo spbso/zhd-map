@@ -56,10 +56,10 @@
     })
 </script>
 
-<div class="text-center text-white block absolute z-20 pointer-events-none hidden tooltip" id="tooltip-{campfireId}"
+<div class="text-center  text-white block absolute z-10 pointer-events-none hidden tooltip" id="tooltip-{campfireId}"
      on:click={placeTooltip}>
-    {#each tooltipElements as element}
-        <div class="bg-[#3C241D] px-2 bg-opacity-90">
+    {#each tooltipElements as element, index}
+        <div class="bg-[#3C241D] px-2 bg-opacity-90 {index === 0 ? 'rounded-t-sm' : ''} {index === (tooltipElements.length-1) ? 'rounded-b-sm' : ''}">
             {element}
         </div>
     {/each}
