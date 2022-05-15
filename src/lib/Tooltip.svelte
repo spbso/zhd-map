@@ -4,13 +4,14 @@
 
     export let campfire = "";
     import locations from '../data/locations.json'
+    import {getCampfire} from "./helpers";
 
     const tooltipElements = campfire.split(',')
     const campfireId = locations[campfire];
 
     export function placeTooltip(e: PointerEvent | null) {
         const arrowElement = document.getElementById(`arrow-${campfireId}`)
-        const parent = document.getElementById(campfireId)
+        const parent = getCampfire(campfireId)
         const tooltip = document.getElementById(`tooltip-${campfireId}`)
         if (!parent) {
             throw Error("Didn't load " + campfireId)

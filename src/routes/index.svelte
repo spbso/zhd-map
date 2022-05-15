@@ -1,10 +1,11 @@
 <script lang="ts">
     import Panzoom from '@panzoom/panzoom'
-    import InlineSVG from 'svelte-inline-svg';
-    import map from '../data/Frame.svg';
     import {onMount} from "svelte";
     import locations from '../data/locations.json'
     import Tooltip from "../lib/Tooltip.svelte";
+    import {getCampfire} from "../lib/helpers";
+    import frame from '../data/Frame 1.svg'
+    import InlineSvg from "svelte-inline-svg";
 
 
     let panzoom;
@@ -42,19 +43,12 @@
             window['map'] = elem
 
             elem.parentElement.addEventListener('wheel', panzoom.zoomWithWheel)
-            // elem.addEventListener('panzoomchange', (event) => {
-            //     scale = event.detail.scale;
-            //     // const tooltip = document.getElementById('tooltip')
-            //     // tooltip.style.display = 'none'
-            //     // console.log(event.detail) // => { x: 0, y: 0, scale: 1 }
-            // })
 
             Object.keys(locations).forEach(k => {
                 const campfireId = locations[k]
                 setTimeout(() => {
-                    const campfireObject = document.getElementById(campfireId);
+                    const campfireObject = getCampfire(campfireId);
                     campfireObject.addEventListener('click', (e: MouseEvent) => {
-                        console.log('campfire click', campfireObject)
                         document.querySelectorAll('.tooltip').forEach(tt => tt.classList.add('hidden'))
                         const tooltip = document.getElementById(`tooltip-${campfireId}`)
                         tooltip.classList.remove('hidden')
@@ -78,7 +72,7 @@
     const showCampfire = (identifier: string) => {
         searchTerm = '';
         const campfireId = locations[identifier];
-        const campfire = document.getElementById(campfireId) as HTMLElement;
+        const campfire = getCampfire(campfireId);
 
         // TODO Refactor
         document.querySelectorAll('.tooltip').forEach(tt => tt.classList.add('hidden'))
@@ -95,8 +89,10 @@
     }
 
     const mapClick = (e: MouseEvent) => {
-        console.log(`client=(${e.clientX}, ${e.clientY}), offset=(${e.offsetX}, ${e.offsetY}), page=(${e.pageX}, ${e.pageY})`)
+        // console.log(`client=(${e.clientX}, ${e.clientY}), offset=(${e.offsetX}, ${e.offsetY}), page=(${e.pageX}, ${e.pageY})`)
     }
+
+    let canvas;
 </script>
 
 <div class="w-screen h-screen m-0 overflow-hidden">
@@ -129,6 +125,8 @@
         {/if}
     </div>
     <div class="max-w-full max-h-full">
-        <InlineSVG src={map} id="target-image" on:click={mapClick}/>
+        <!--        <canvas id="target-image" bind:this={canvas}>-->
+        <!--        </canvas>-->
+        <InlineSvg src={frame} id="target-image" on:click={mapClick}/>
     </div>
 </div>
