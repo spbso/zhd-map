@@ -11,7 +11,6 @@ const to_cache = build.concat(files);
 const staticAssets = new Set(to_cache);
 
 worker.addEventListener('install', (event) => {
-    console.log('install worker')
     event.waitUntil(
         caches
             .open(FILES)
@@ -23,7 +22,6 @@ worker.addEventListener('install', (event) => {
 });
 
 worker.addEventListener('activate', (event) => {
-    console.log('activate worker')
     event.waitUntil(
         caches.keys().then(async (keys) => {
             // delete old caches
@@ -41,7 +39,6 @@ worker.addEventListener('activate', (event) => {
  * Fall back to the cache if the user is offline.
  */
 async function fetchAndCache(request: Request) {
-    console.log('fetchAndCache')
     const cache = await caches.open(`offline${version}`);
 
     try {
@@ -57,7 +54,6 @@ async function fetchAndCache(request: Request) {
 }
 
 worker.addEventListener('fetch', (event) => {
-    console.log('fetch')
     if (event.request.method !== 'GET' || event.request.headers.has('range')) return;
 
     const url = new URL(event.request.url);
